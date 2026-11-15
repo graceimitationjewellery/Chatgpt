@@ -1,48 +1,34 @@
-const PIN = "356301"; // Change this PIN before publishing if desired. This browser-only starter is not secure authentication.
-const $ = id => document.getElementById(id);
-let products = JSON.parse(localStorage.getItem("grace_products") || "[]");
-let logoData = localStorage.getItem("grace_logo") || "";
-let currentFilter = "all";
-function save(){localStorage.setItem("grace_products",JSON.stringify(products));render();}
-function render(){
- const grid=$("productGrid"); grid.innerHTML="";
- const shown=products.filter(p=>currentFilter==="all"||p.category===currentFilter);
- $("empty").style.display=shown.length?"none":"block";
- shown.forEach(p=>{
-  const card=document.createElement("article");card.className="product";
-  const img=document.createElement("img");img.src=p.image||"";
-  img.alt=p.name; if(!p.image){img.style.display="none";}
-  const info=document.createElement("div");info.className="product-info";
-  const h=document.createElement("h3");h.textContent=p.name;
-  const d=document.createElement("p");d.textContent=p.description||"";
-  const price=document.createElement("p");price.className="price";price.textContent=p.price?`₹${p.price}`:"";
-  info.append(h,d,price);card.append(img,info);grid.append(card);
- });
- renderAdmin();
-}
-function applyLogo(){if(logoData){$("logoBox").innerHTML=`<img alt="Grace logo" src="${logoData}">`;}else{$("logoBox").textContent="G";}}
-function show(id){$(id).classList.remove("hidden")}function hide(id){$(id).classList.add("hidden")}
-$("adminOpen").onclick=()=>show("loginModal");
-document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>hide(b.dataset.close));
-$("loginBtn").onclick=()=>{if($("pinInput").value===PIN){hide("loginModal");$("pinInput").value="";$("loginError").textContent="";show("adminModal");}else{$("loginError").textContent="गलत PIN. फिर से कोशिश करें।";}};
-$("pinInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("loginBtn").click();});
-$("logoutBtn").onclick=()=>hide("adminModal");
-document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");currentFilter=b.dataset.filter;render();});
-function fileAsData(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);});}
-$("logoUpload").onchange=async e=>{const f=e.target.files[0];if(!f)return;logoData=await fileAsData(f);localStorage.setItem("grace_logo",logoData);applyLogo();e.target.value="";};
-$("removeLogo").onclick=()=>{logoData="";localStorage.removeItem("grace_logo");applyLogo();};
-$("saveProduct").onclick=async()=>{
- const name=$("pName").value.trim();if(!name){alert("Product name लिखें।");return;}
- const id=$("editId").value;const old=products.find(p=>p.id===id);
- const file=$("pImage").files[0];const image=file?await fileAsData(file):(old?.image||"");
- const item={id:id||String(Date.now()),name,price:$("pPrice").value.trim(),category:$("pCategory").value,description:$("pDescription").value.trim(),image};
- if(id)products=products.map(p=>p.id===id?item:p);else products.unshift(item);
- save();clearForm();
-};
-function clearForm(){$("editId").value="";$("pName").value="";$("pPrice").value="";$("pCategory").value="jewellery";$("pDescription").value="";$("pImage").value="";$("saveProduct").textContent="Save Product";}
-$("cancelEdit").onclick=clearForm;
-function renderAdmin(){
- const root=$("adminProducts");if(!root)return;root.innerHTML="";
- products.forEach(p=>{const row=document.createElement("div");row.className="admin-item";const label=document.createElement("span");label.textContent=p.name+(p.category==="purse"?" · Purse":" · Jewellery");const controls=document.createElement("div");const edit=document.createElement("button");edit.className="secondary";edit.textContent="Edit";edit.onclick=()=>{ $("editId").value=p.id;$("pName").value=p.name;$("pPrice").value=p.price||"";$("pCategory").value=p.category;$("pDescription").value=p.description||"";$("saveProduct").textContent="Update Product";};const del=document.createElement("button");del.className="secondary danger";del.textContent="Delete";del.onclick=()=>{if(confirm("इस product को delete करें?")){products=products.filter(x=>x.id!==p.id);save();}};controls.append(edit,del);row.append(label,controls);root.append(row);});
-}
-$("year").textContent=new Date().getFullYear();applyLogo();render();
+const $=s=>document.querySelector(s), storeKey='grace_demo_data_v1';
+const defaults={products:[{name:'Elegant Earrings',category:'Artificial Jewellery',price:'',description:'Beautiful everyday sparkle'},{name:'Premium Ladies Purse',category:'Ladies Purse',price:'',description:'A graceful accessory for every outing'},{name:'Festive Jewellery Set',category:'Artificial Jewellery',price:'',description:'Make your special moments shine'}],orders:[],customers:[],offers:[],gallery:[],reviews:[],enquiries:[],settings:{shop:'Grace Imitation Jewellery',phone:'9079394754',instagram:'grace_creation_bjs',address:'Gali No. 19, Hanuwant B Road, BJS Colony, Jodhpur'},seo:{title:'Grace Imitation Jewellery | BJS Jodhpur',description:'Artificial jewellery and premium ladies purse in Jodhpur.'}};
+let data;try{data=JSON.parse(localStorage.getItem(storeKey))||defaults}catch(e){data=defaults}
+function save(){localStorage.setItem(storeKey,JSON.stringify(data))}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderProducts(){const g=$('#productGrid');g.innerHTML=data.products.length?data.products.map((p,i)=>`<article class="product"><div class="symbol">${p.category.toLowerCase().includes('purse')?'👜':'✧'}</div><h3>${esc(p.name)}</h3><p>${esc(p.description||p.category)}</p>${p.price?`<b>₹${esc(p.price)}</b>`:''}</article>`).join(''):'<p class="empty">New collection coming soon.</p>'}
+$('#year').textContent=new Date().getFullYear();renderProducts();
+$('#adminOpen').onclick=()=>$('#loginModal').classList.add('show');
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.modal').classList.remove('show'));
+$('#loginBtn').onclick=()=>{if($('#pin').value==='356301'){$('#loginModal').classList.remove('show');$('#adminModal').classList.add('show');$('#loginError').textContent='';showAdmin('Dashboard')}else $('#loginError').textContent='Incorrect PIN'};
+$('#logoutBtn').onclick=()=>$('#adminModal').classList.remove('show');
+const modules=['Dashboard','Products','Orders','Customers','Website Design','Offers & Coupons','Gallery','SEO Settings','Security','Backup & Restore','Reviews','Enquiries','Shop Settings'];
+function showAdmin(name){$('#adminNav').innerHTML=modules.map(m=>`<button class="${m===name?'active':''}" data-module="${m}">${m}</button>`).join('');$('#adminNav').querySelectorAll('button').forEach(b=>b.onclick=()=>showAdmin(b.dataset.module));const c=$('#adminContent');let html=`<h3>${name}</h3>`;
+if(name==='Dashboard')html+=`<div class="stats"><div class="stat"><b>${data.products.length}</b>Products</div><div class="stat"><b>${data.orders.length}</b>Orders</div><div class="stat"><b>${data.customers.length}</b>Customers</div></div><p>Welcome to your Grace store control center.</p>`;
+else if(name==='Products')html+=`<form id="productForm"><input name="name" placeholder="Product name" required><input name="category" placeholder="Category" value="Artificial Jewellery"><input name="price" placeholder="Price (optional)"><textarea name="description" placeholder="Description"></textarea><button class="btn">Add Product</button></form>${table(data.products,['name','category','price'],'products')}`;
+else if(['Orders','Customers','Reviews','Enquiries'].includes(name)){const key={Orders:'orders',Customers:'customers',Reviews:'reviews',Enquiries:'enquiries'}[name];html+=`<p class="muted">Records can be added here in this demo panel.</p><textarea id="recordText" placeholder="Enter ${name.toLowerCase()} note / record"></textarea><button class="btn" id="addRecord">Save Record</button>${table(data[key],['name','detail','date'],key)}`}
+else if(name==='Offers & Coupons')html+=`<form id="offerForm"><input name="name" placeholder="Offer / coupon name" required><input name="detail" placeholder="Discount details"><button class="btn">Save Offer</button></form>${table(data.offers,['name','detail'],'offers')}`;
+else if(name==='Gallery')html+=`<form id="galleryForm"><input name="name" placeholder="Photo title" required><input name="url" placeholder="Image URL (https://...)"><button class="btn">Add Gallery Item</button></form>${table(data.gallery,['name','url'],'gallery')}`;
+else if(name==='Website Design')html+=`<p>Current theme: Light Pink + Off-white</p><label>Accent colour</label><input type="color" id="accent" value="#d88da9"><button class="btn" id="saveAccent">Apply colour in this browser</button><p class="muted">This demo changes the local browser only.</p>`;
+else if(name==='SEO Settings')html+=`<label>Page title</label><input id="seoTitle" value="${esc(data.seo.title)}"><label>Meta description</label><textarea id="seoDesc">${esc(data.seo.description)}</textarea><button class="btn" id="saveSeo">Save SEO details</button>`;
+else if(name==='Security')html+=`<p><b>Demo PIN:</b> 356301</p><p class="muted">This PIN is visible in the website code and is not secure. Use server-side authentication before going live.</p><p>Browser storage only. No staff roles or server permissions.</p>`;
+else if(name==='Backup & Restore')html+=`<button class="btn" id="exportData">Download JSON Backup</button><p class="muted">Backup contains this browser's demo data.</p><input type="file" id="importFile" accept="application/json"><button class="btn secondary" id="importData">Restore JSON</button>`;
+else if(name==='Shop Settings')html+=`<label>Shop name</label><input id="shopName" value="${esc(data.settings.shop)}"><label>Phone</label><input id="shopPhone" value="${esc(data.settings.phone)}"><label>Instagram ID</label><input id="shopInstagram" value="${esc(data.settings.instagram)}"><label>Address</label><textarea id="shopAddress">${esc(data.settings.address)}</textarea><button class="btn" id="saveSettings">Save shop details</button>`;
+c.innerHTML=html;wire(name)}
+function table(arr,fields,key){if(!arr.length)return '<p class="empty">No records yet.</p>';return `<table class="admin-table"><thead><tr>${fields.map(f=>`<th>${f}</th>`).join('')}<th>Action</th></tr></thead><tbody>${arr.map((o,i)=>`<tr>${fields.map(f=>`<td>${esc(o[f]||'')}</td>`).join('')}<td><button class="secondary" data-delete="${key}:${i}">Delete</button></td></tr>`).join('')}</tbody></table>`}
+function wire(n){const c=$('#adminContent');if(n==='Products')$('#productForm').onsubmit=e=>{e.preventDefault();data.products.push(Object.fromEntries(new FormData(e.target)));save();renderProducts();showAdmin(n)};
+if(['Orders','Customers','Reviews','Enquiries'].includes(n))$('#addRecord').onclick=()=>{let key={Orders:'orders',Customers:'customers',Reviews:'reviews',Enquiries:'enquiries'}[n];data[key].push({name:n+' entry',detail:$('#recordText').value,date:new Date().toLocaleDateString()});save();showAdmin(n)};
+if(n==='Offers & Coupons')$('#offerForm').onsubmit=e=>{e.preventDefault();data.offers.push(Object.fromEntries(new FormData(e.target)));save();showAdmin(n)};
+if(n==='Gallery')$('#galleryForm').onsubmit=e=>{e.preventDefault();data.gallery.push(Object.fromEntries(new FormData(e.target)));save();showAdmin(n)};
+if(n==='Website Design')$('#saveAccent').onclick=()=>{document.documentElement.style.setProperty('--pink',$('#accent').value);alert('Accent colour applied in this browser')};
+if(n==='SEO Settings')$('#saveSeo').onclick=()=>{data.seo={title:$('#seoTitle').value,description:$('#seoDesc').value};save();alert('Saved locally')};
+if(n==='Shop Settings')$('#saveSettings').onclick=()=>{data.settings={shop:$('#shopName').value,phone:$('#shopPhone').value,instagram:$('#shopInstagram').value,address:$('#shopAddress').value};save();alert('Saved locally')};
+if(n==='Backup & Restore'){$('#exportData').onclick=()=>{let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.href=u;a.download='grace-backup.json';a.click();URL.revokeObjectURL(u)};$('#importData').onclick=()=>{let f=$('#importFile').files[0];if(!f)return alert('Choose a backup file first');let r=new FileReader();r.onload=()=>{try{data=JSON.parse(r.result);save();renderProducts();showAdmin(n)}catch(e){alert('Invalid backup file')}};r.readAsText(f)}}
+c.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{let [k,i]=b.dataset.delete.split(':');data[k].splice(Number(i),1);save();renderProducts();showAdmin(n)})}

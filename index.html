@@ -1,76 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Grace Imitation Jewellery | Jodhpur</title>
-<meta name="description" content="Artificial jewellery and premium ladies purses at Grace Imitation Jewellery, BJS Colony, Jodhpur.">
+<meta name="description" content="Grace Imitation Jewellery, BJS Colony Jodhpur - Artificial Jewellery and Premium Ladies Purse">
+<title>Grace Imitation Jewellery | BJS Jodhpur</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top">
-  <div class="brand">
-    <div class="logo" id="logoBox">G</div>
-    <div><div class="brandname" id="shopName">Grace</div><div class="subbrand">IMITATION JEWELLERY</div></div>
-  </div>
-  <button class="admin-open" id="adminOpen">Admin Login</button>
-</header>
-<section class="hero">
-  <p class="eyebrow">ELEGANCE FOR EVERY OCCASION</p>
-  <h1>Grace Imitation Jewellery</h1>
-  <p class="hero-sub">Beautiful details. Timeless style.</p>
-  <a class="primary" href="#collection">Explore Collection</a>
-</section>
-<section class="intro">
-  <h2>Our Collection</h2>
-  <p>Artificial Jewellery &amp; Premium Ladies Purse</p>
-</section>
-<main id="collection" class="products">
-  <div class="filters">
-    <button class="filter active" data-filter="all">All</button>
-    <button class="filter" data-filter="jewellery">Jewellery</button>
-    <button class="filter" data-filter="purse">Ladies Purse</button>
-  </div>
-  <div id="productGrid" class="grid"></div>
-  <p id="empty" class="empty">Our collection is being updated. Please visit us soon!</p>
-</main>
-<section class="contact">
-  <h2>Visit Grace</h2>
-  <p>P. No. 217, Gali No. 19, Hanuwant B Road,<br>BJS Colony, Jodhpur, Rajasthan</p>
-  <p><strong>Call:</strong> <a href="tel:9079394754">9079394754</a></p>
-  <p><strong>Instagram:</strong> <a href="https://instagram.com/grace_creation_bjs" target="_blank" rel="noopener">@grace_creation_bjs</a></p>
-  <a class="primary" id="whatsappLink" href="https://wa.me/919079394754?text=Hello%20Grace%2C%20I%20want%20to%20know%20about%20your%20collection." target="_blank" rel="noopener">Order on WhatsApp</a>
-</section>
-<footer>© <span id="year"></span> Grace Imitation Jewellery · BJS Colony, Jodhpur</footer>
-
-<div class="modal hidden" id="loginModal">
- <div class="panel small">
-  <button class="close" data-close="loginModal">×</button><h2>Admin Login</h2>
-  <p class="muted">Enter your shop admin PIN.</p>
-  <input id="pinInput" type="password" inputmode="numeric" placeholder="Admin PIN">
-  <button class="primary full" id="loginBtn">Login</button><p class="error" id="loginError"></p>
- </div>
-</div>
-<div class="modal hidden" id="adminModal">
- <div class="panel">
-  <button class="close" data-close="adminModal">×</button>
-  <h2>Grace Admin Panel</h2>
-  <p class="notice">Starter version: changes are saved in this browser only. To show edits on every customer's phone, we must connect online storage in the next setup step.</p>
-  <div class="admin-section">
-   <h3>Shop logo</h3><input type="file" id="logoUpload" accept="image/*"><button class="secondary" id="removeLogo">Remove logo</button>
-  </div>
-  <div class="admin-section">
-   <h3>Add / Edit Product</h3>
-   <input type="hidden" id="editId">
-   <input id="pName" placeholder="Product name">
-   <input id="pPrice" placeholder="Price (optional)" inputmode="decimal">
-   <select id="pCategory"><option value="jewellery">Jewellery</option><option value="purse">Ladies Purse</option></select>
-   <textarea id="pDescription" placeholder="Short description (optional)"></textarea>
-   <input type="file" id="pImage" accept="image/*">
-   <div class="actions"><button class="primary" id="saveProduct">Save Product</button><button class="secondary" id="cancelEdit">Clear</button></div>
-  </div>
-  <div class="admin-section"><h3>Manage Products</h3><div id="adminProducts"></div></div>
-  <button class="secondary full" id="logoutBtn">Log out</button>
- </div>
-</div>
-<script src="app.js"></script>
-</body></html>
+<header class="top"><div class="brand"><span class="logo">G</span><div><b>GRACE</b><small>IMITATION JEWELLERY</small></div></div>
+<nav><a href="#home">Home</a><a href="#collections">Collections</a><a href="#about">About</a><a href="#contact">Contact</a><button class="admin-open" id="adminOpen">Admin Login</button></nav></header>
+<main>
+<section class="hero" id="home"><div class="hero-copy"><span class="eyebrow">ELEGANCE • BEAUTY • STYLE</span><h1>Everyday Glamour,<br><em>Gracefully Yours.</em></h1><p>Beautiful artificial jewellery and premium ladies purses for every special moment.</p><div class="actions"><a class="btn" href="#collections">Explore Collection</a><a class="textlink" href="https://wa.me/919079394754">WhatsApp Us ↗</a></div></div><div class="hero-art"><div class="art-circle">G</div><div class="art-note">A little sparkle<br>goes a long way ✦</div></div></section>
+<section class="section" id="collections"><div class="section-head"><div><span class="eyebrow">OUR PICKS</span><h2>Featured Collection</h2></div><p>Find a look that feels like you.</p></div><div class="products" id="productGrid"></div></section>
+<section class="banner" id="about"><span>THE GRACE PROMISE</span><h2>Style that makes<br>you feel special.</h2><p>Visit our store in BJS Colony, Jodhpur.</p></section>
+<section class="contact section" id="contact"><span class="eyebrow">COME SAY HELLO</span><h2>Visit Grace</h2><p>Gali No. 19, Hanuwant B Road, BJS Colony, Jodhpur, Rajasthan</p><p><b>Call:</b> <a href="tel:9079394754">9079394754</a> &nbsp; <b>Instagram:</b> <a href="https://instagram.com/grace_creation_bjs">@grace_creation_bjs</a></p><a class="btn" href="https://wa.me/919079394754">Chat on WhatsApp</a></section>
+</main><footer>© <span id="year"></span> Grace Imitation Jewellery · BJS Jodhpur</footer>
+<div class="modal" id="loginModal"><div class="panel narrow"><button class="close" data-close>×</button><h2>Admin Login</h2><p class="muted">Demo access PIN: <b>356301</b></p><input id="pin" type="password" placeholder="Enter admin PIN"><button class="btn full" id="loginBtn">Continue</button><p id="loginError" class="error"></p></div></div>
+<div class="modal" id="adminModal"><div class="panel admin-panel"><button class="close" data-close>×</button><div class="admin-head"><div><span class="eyebrow">STORE CONTROL CENTER</span><h2>Grace Admin Panel</h2></div><button class="btn secondary" id="logoutBtn">Logout</button></div><div class="admin-layout"><aside id="adminNav"></aside><section class="admin-content" id="adminContent"></section></div><p class="notice">Important: This is a static demo admin panel. Data is stored only in this browser (localStorage); it is not a secure live backend and does not sync to other devices/customers. Do not store sensitive customer/payment data here.</p></div></div>
+<script src="app.js"></script></body></html>
